@@ -185,6 +185,9 @@
       if (current) current.stop();
       if (last) finish(); else { st.pos++; go("trial"); }
     });
+    // back to the clip before, its answers kept to correct (researcher's ask, M024 5); none on the first clip, and none
+    // after «پایان», whose code has gone - a changed code would count as one more listener
+    var back = st.pos > 0 ? button("قبلی", function () { if (current) current.stop(); st.pos--; go("trial"); }, false) : null;
     var scales = qs.map(function (q, i) {
       return scale(q[0], q[1], q[2], st.ratings[k][i], function (v) { st.ratings[k][i] = v; save(); upd(); });
     });
@@ -207,7 +210,7 @@
       h("div", { class: "progress" }, [h("span", { text: "تکه‌ی " + fa(st.pos + 1) + " از " + fa(N) }),
         h("div", { class: "pbar" }, [h("i", { style: "width:" + (100 * st.pos / N) + "%" })])]),
       pl
-    ].concat(scales.map(function (s) { return s.el; }), [actions(next)]);
+    ].concat(scales.map(function (s) { return s.el; }), [actions(next, back)]);
   }
 
   function finish() {
